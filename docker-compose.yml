@@ -55,5 +55,6 @@ services:
     networks:
       - postgres-net
     command: >
-      sh -c "npm run start:prod"
+      sh -c "npx typeorm migration:run -d ./db_conf/ormconfig.ts
+      npm run start:prod"
     restart: unless-stopped

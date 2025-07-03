@@ -15,18 +15,92 @@ export class Test1751458975042 implements typeorm.MigrationInterface {
                         generationStrategy: 'increment'
                     },
                     {
-                        name: 'name',
+                        name: 'originalUrl',
+                        type: 'text',
+                        isNullable: false
+                    },
+                    {
+                        name: 'expiresAt',
+                        type: 'date',
+                        isNullable: true
+                    },
+                    {
+                        name: 'alias',
                         type: 'varchar',
-                        length: '255'
+                        isNullable: true,
+                        length: '20'
+                    },
+                    {
+                        name: 'shortUrl',
+                        type: 'text',
+                        isNullable: false
+                    },
+                    {
+                        name: 'createdAt',
+                        type: 'date',
+                        default: 'CURRENT_DATE'
+                    },
+                    {
+                        name: 'clickCount',
+                        type: 'int',
+                        default: 0
                     }
                 ]
             }), true
         );
-        console.log('Table urls created');
+
+        await queryRunner.createIndex(
+            'urls',
+            new typeorm.TableIndex({
+                name: 'IDX_SHORT_URL',
+                columnNames: ['shortUrl'],
+                isUnique: true
+            })            
+        );
+
+        await queryRunner.createTable(
+            new typeorm.Table({
+                name:'url_ip',
+                columns: [
+                    {
+                        name: 'id',
+                        type: 'int',
+                        isPrimary: true,
+                        isGenerated: true,
+                        generationStrategy: 'increment'
+                    },
+                    {
+                        name: 'ip',
+                        type: 'text',
+                        isNullable: false
+                    },
+                    {
+                        name: 'click_date',
+                        type: 'date',
+                        default: 'CURRENT_DATE'
+                    },
+                    {
+                        name: 'shortUrl',
+                        type: 'text',
+                        isNullable: false
+                    }
+                ]
+            }), true
+        );
+
+        await queryRunner.createForeignKey(
+            'url_ip',
+            new typeorm.TableForeignKey({
+                columnNames: ['shortUrl'],
+                referencedColumnNames: ['shortUrl'],
+                referencedTableName: 'urls',
+                onDelete: 'CASCADE'
+            })
+        );
     }
 
     public async down(queryRunner: typeorm.QueryRunner): Promise<void> {
-        await queryRunner.dropTable('urls');
-        console.log('Table urls dropped');
+        await queryRunner.dropTable('url_ip', true);
+        await queryRunner.dropTable('urls', true);
     }
 }
