@@ -3,7 +3,7 @@ import * as dotenv from 'dotenv';
 import path from "path";
 
 dotenv.config({ path: path.join(process.cwd(), '../.env') });
-
+console.log(path.join(process.cwd(), 'dist/src/db/entities/*.{ts,js}'))
 const dataSource = new DataSource({
   type: 'postgres',
   host: process.env.POSTGRES_HOST,
@@ -11,8 +11,8 @@ const dataSource = new DataSource({
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   database: process.env.POSTGRES_DB,
-  entities: [path.join(process.cwd(), 'dist/src/db/entities/*.{ts,js}')],
-  migrations: [path.join(process.cwd(),'dist/src/db/migrations/*.{ts,js}')],
+  entities: [path.join(process.cwd(), 'dist/db/entities/*.{ts,js}')],
+  migrations: [path.join(process.cwd(),'dist/db/migrations/*.{ts,js}')],
   synchronize: false,
   logging: true
 });

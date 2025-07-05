@@ -18,7 +18,7 @@ export class Urls {
   @Column({nullable:false,unique:true})
   shortUrl: string;
 
-  @Column({default: () => 'CURRENT_DATE'})
+  @Column({nullable:false, default: () => 'CURRENT_DATE'})
   createdAt: Date;
 
   @Column({default: 0})

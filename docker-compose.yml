@@ -31,9 +31,8 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
-
-  app:
-    container_name: app
+  backend:
+    container_name: app_backend
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -41,7 +40,7 @@ services:
       postgres:
         condition: service_healthy
     environment:
-      POSTGRES_HOST: ${POSTGRES_HOST}
+      POSTGRES_HOST: postgres
       POSTGRES_PORT: ${POSTGRES_PORT}
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -51,10 +50,20 @@ services:
       DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:${POSTGRES_PORT}/${POSTGRES_DB}
     ports:
       - "${APP_PORT}:${APP_PORT}"
-    working_dir: /app_backend
+    working_dir: /app
     networks:
       - postgres-net
-    command: >
-      sh -c "npx typeorm migration:run -d ./db_conf/ormconfig.ts
-      npm run start:prod"
+    restart: unless-stopped
+
+  frontend:
+    container_name: app_frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    environment:
+      APP_PORT: ${APP_PORT}
+      NODE_ENV: ${NODE_ENV}
+    ports:
+      - "${FRONT_PORT}:${FRONT_PORT}"
+    working_dir: /app
     restart: unless-stopped

@@ -2,8 +2,8 @@ import { Module } from '@nestjs/common';
 import { UrlsController } from './urls.controller';
 import { UrlsService } from './urls.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Urls } from 'src/db/entities/urls.entity';
-import { Url_ip } from 'src/db/entities/url_ip.entity';
+import { Urls } from '../db/entities/urls.entity';
+import { Url_ip } from '../db/entities/url_ip.entity';
 
 @Module({
   imports:[TypeOrmModule.forFeature([Urls, Url_ip])],

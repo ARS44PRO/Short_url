@@ -1,0 +1,1 @@
+export const SERVER_URL = `http://localhost:${process.env.NEXT_PUBLIC_APP_PORT}`

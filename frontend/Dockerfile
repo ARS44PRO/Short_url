@@ -10,6 +10,6 @@ COPY . .
 
 RUN npm run build
 
-EXPOSE 8080
+EXPOSE 3000
 
-CMD ["sh", "-c", "npx typeorm migration:run -d ./db_conf/ormconfig.ts && npm run start:prod"]
+CMD ["npm", "start"]

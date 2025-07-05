@@ -4,8 +4,8 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 import { UrlsModule } from './urls/urls.module';
 
-dotenv.config({ path: path.join(__dirname, '../../../.env') });
-
+dotenv.config({ path: path.join(__dirname, '../.env') });
+console.log(path.join(__dirname, "db/entities/*.{ts,js}"))
 @Module({
   imports: [
     TypeOrmModule.forRoot({

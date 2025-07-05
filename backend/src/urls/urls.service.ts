@@ -1,7 +1,7 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Url_ip } from 'src/db/entities/url_ip.entity';
-import { Urls } from 'src/db/entities/urls.entity';
+import { Url_ip } from '../db/entities/url_ip.entity';
+import { Urls } from '../db/entities/urls.entity';
 import { Repository } from 'typeorm';
 import {nanoid} from 'nanoid';
 import { CreateUrlDto } from './urls.dto';
@@ -62,14 +62,18 @@ export class UrlsService {
   async redir(ip:string, url: string){
     if (await this.urlRep.existsBy({shortUrl:url})){
       const red = await this.urlRep.findOneBy({shortUrl:url});
-
+      const today = new Date();
+      if (red && red.expiresAt>today){
       await this.ipRep.insert({
         ip: ip,
         shortUrl: url
       });
       await this.urlRep.update({shortUrl:url}, {clickCount:()=>'clickCount + 1'});
       
-      return red?.originalUrl
+      return red.originalUrl
+    } else {
+      throw new ConflictException('Срок действия ссылки истек');
+    }
     } else {
       throw new NotFoundException('Такой ссылки нету');
     }
