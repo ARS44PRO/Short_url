@@ -32,4 +32,4 @@ docker-compose up
 
 ### Frontend
 
-> **Для доступа перейдите на http://localhost/3000
+> Для доступа перейдите на http://localhost/3000
