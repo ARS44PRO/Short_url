@@ -28,3 +28,8 @@ cd Short_url
 
 # Запустить контейнеры
 docker-compose up
+```
+
+### Frontend
+
+> **Для доступа перейдите на http://localhost/3000
